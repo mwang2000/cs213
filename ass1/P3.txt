@@ -1,0 +1,16 @@
+Q1
+1. 9E 45 0D 6D
+2. 5D 29 FE 43 A7 B4 26 06
+3. AA BB BB AA. 
+
+We can then generalize that for an n-byte integer in hexadecimal, if the integer is palindromic ie identical read forwards and backwards (in this case, in byte-parts), then its big and little endian representations will be identical.
+
+4. The hubble stores data in big endian, while the intel i7 stores in little endian.
+
+From calculation, we can see that
+521,821 in hex is 00 07 F6 65
+2,256,461 in hex is 00 22 6E 4D, thus -2,256,461 can be represented by the twos complement, which in hex is 00 1D 91 B3
+
+Thus the intel should store the data
+521,821 as 65 F6 07 00
+-2,256,461 as B3 91 1D 00
