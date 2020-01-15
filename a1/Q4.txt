@@ -1,9 +1,9 @@
 The hubble stores data in big endian, while the intel i7 stores in little endian.
 
 From calculation, we can see that
-521,821 in hex is 00 07 F6 65
-2,256,461 in hex is 00 22 6E 4D, thus -2,256,461 can be represented by the twos complement, which in hex is 00 1D 91 B3
+521,821 in hex is 0007F665
+2,256,461 in hex is 00226E4D, thus -2,256,461 can be represented by the twos complement, which in hex is FFDD91B3
 
 Thus the intel should store the data
-521,821 as 65 F6 07 00
--2,256,461 as B3 91 1D 00
+521,821 as 65F60700
+-2,256,461 as B391DDFF
