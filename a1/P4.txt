@@ -1,0 +1,21 @@
+// incorrect number of arguments
+
+11 22 33
+
+11 22 33 44 55
+
+//test 0
+00 00 00 00
+
+//max in unsigned
+ff ff ff ff
+
+//max in signed
+7f ff ff ff
+
+//thus following should be negative
+8f ff ff ff
+
+
+Signed int min: -2147483648 max: 2147483647
+Unsigned int min: 0 max: 4294967295
