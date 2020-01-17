@@ -24,6 +24,7 @@ public class MainMemoryTest {
         b4 = (byte) 0x44;
     }
 
+    //Test setting a negative address
     @Test
     public void testSetExceptionNegative() {
         try {
@@ -34,6 +35,7 @@ public class MainMemoryTest {
         }
     }
 
+    //Test setting an address outside the bound of the byte array
     @Test
     public void testSetExceptionHigh() {
         try {
@@ -44,6 +46,7 @@ public class MainMemoryTest {
         }
     }
 
+    //Test storing a byte array smaller than array being copied into
     @Test
     public void testSetLowBound() {
         byte[] bytes = new byte[2];
@@ -59,6 +62,7 @@ public class MainMemoryTest {
         }
     }
 
+    //Test storing a byte array the same size as the array being copied into
     @Test
     public void testSetHighBound() {
         byte[] bytes = new byte[8];
@@ -70,6 +74,7 @@ public class MainMemoryTest {
         }
     }
 
+    //Test getting a byte outside the bound in the negative sense
     @Test
     public void testGetExceptionNegative() {
         try {
@@ -80,6 +85,7 @@ public class MainMemoryTest {
         }
     }
 
+    //Test getting a byte outside the bound in the positive sense
     @Test
     public void testGetExceptionHigh() {
         try {
@@ -99,6 +105,7 @@ public class MainMemoryTest {
         }
     }
 
+    //Test get
     @Test
     public void testGetPart() {
         try {
@@ -108,17 +115,20 @@ public class MainMemoryTest {
         }
     }
 
+    //Test if accessAligned function is working
     @Test
     public void TestIsAccessAligned() {
         assertTrue(mainMemory.isAccessAligned(8,2));
         assertFalse(mainMemory.isAccessAligned(8,3));
     }
 
+    //Test bytes to int
     @Test
     public void bytesToInteger() {
         assertEquals(287454020, mainMemory.bytesToInteger(b1, b2, b3, b4));
     }
 
+    //Test int to byte
     @Test
     public void integerToBytes() {
         byte[] bytes = mainMemory.integerToBytes(1234567);
@@ -128,6 +138,7 @@ public class MainMemoryTest {
         assertEquals(0,bytes[0]);
     }
 
+    //Test int to bytes with 0
     @Test
     public void integerToBytesZero() {
         byte[] bytes = mainMemory.integerToBytes(0);
@@ -137,6 +148,7 @@ public class MainMemoryTest {
         assertEquals(0,bytes[0]);
     }
 
+    //Test largest possible int
     @Test
     public void integerToBytesLargest() {
         byte[] bytes = mainMemory.integerToBytes(2147483647);
@@ -146,6 +158,7 @@ public class MainMemoryTest {
         assertEquals(127,bytes[0]);
     }
 
+    //Test smallest possible int
     @Test
     public void integerToBytesSmallest() {
         byte[] bytes = mainMemory.integerToBytes(-2147483648);
