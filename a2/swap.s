@@ -5,6 +5,7 @@
                  ld   0x04(r1), r3        # r3 = value of array[1]
                  st   r2, 0x0(r0)         # t = array[0]             
                  st   r3, 0x0(r1)         # array[0] = array[1]
+                 ld   0x0(r0), r0         # r0 = value of t
                  st   r0, 0x04(r1)        # array[1] = t
                  halt                     # halt
 
