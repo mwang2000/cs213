@@ -1,43 +1,87 @@
 .pos 0x100
-                 ld   $tmp, r0            # r0 = address of tmp
-                 ld   $tos, r1            # r1 = address of tos
-                 ld   $0, r2              # r2 = 0
+    # tmp = 0
+    ld $tmp, r0             # r0 = address of tmp
+    ld 0(r0), r1            # r1 = value of tmp
+    ld $0, r2               # r2 = 0
+    st r2, 0(r0)            # tmp = 0 
+    ld 0(r2), r1               # r1 = tmp
 
-                 # tos  = 0;
-                 st   r2, 0(r0)           # tmp = 0
-                 st   r2, 0(r1)           # tos = 0
+    # tos = 0
+    ld $tos, r3             # r3 = address of tos
+    ld 0(r3), r4            # r4 = value of tos
+    st r2, 0(r3)            # tos = 0
+    ld 0(r2), r4               # r4 = tos
 
+    #s[tos] = a[0]
+    ld $s, r5               # r5 = address of s
+    ld $a, r6               # r6 = address of a
+    ld (r6, r2, 4), r7      # r7 = a[0]
+    st r7, (r5,r4,4)        # s[tos] = a[0]
 
-                 # i  = a[i];
-                 ld   (r1, r2, 4), r3     # r3 = value of a[i]
-                 st   r3, 0(r0)           # i  = a[i]
+    # tos++
+    inc r4                 # tos++
+    st r4, 0(r3)            # store tos into memory
 
-                 # p  = &j;
-                 ld   $j, r4              # r4 = address of j
-                 ld   $p, r5              # r5 = address of p 
-                 st   r4, 0(r5)           # p = &j
+    #s[tos] = a[1]
+    inc r2                  # r2 ++
+    ld (r6, r2, 4), r7      # r7 = a[1]
+    st r7, (r5,r4,4)        # s[tos] = a[1]
 
-                 # *p = 4;
-                 ld   $4, r6              # r6 = 4
-                 ld   0x0(r5), r7         # r7 = value of p (address of j)
-                 st   $4, 0(r7)           # *p = 4;           
+    # tos ++
+    inc r4                 # tos++
+    st r4, 0(r3)            # store tos into memory
 
-                 # p  = &a[a[2]];        
-                 ld   0x8(r1), r0         # r0 = value of a[2]
-                 
+    # s[tos] = a[2]
+    inc r2                  # r2 ++
+    ld (r6, r2, 4), r7      # r7 = a[2]
+    st r7, (r5,r4,4)        # s[tos] = a[2]
 
-                 halt                 
+    # tos ++
+    inc r4                 # tos++
+    st r4, 0(r3)            # store tos into memory
 
+    # tos --
+    dec r4                  # tos--
+    st r4, 0(r3)            # store tos into memory
 
+    # tmp = s[tos]
+    ld (r5,r4,4), r7        # r7 = s[tos]
+    st r7, 0(r0)            # tmp = s[tos]
+    ld $tmp, r1             # r1 = address of tmp
+    ld 0(r1), r1            # r1 = value of tmp
 
-.pos 0x2000
-tmp:             .long 0x00000000         # tmp
-too:             .long 0x00000000         # tos
-a:               .long 0x00000001         # a[0]
-                 .long 0x00000002         # a[1]
-                 .long 0x00000003         # a[2]
-s:               .long 0x00000001         # s[0]
-                 .long 0x00000002         # s[1]
-                 .long 0x00000003         # s[2]
-                 .long 0x00000004         # s[3]             
-                 .long 0x00000005         # s[4]
+    # tos --
+    dec r4                  # tos--
+    st r4, 0(r3)            # store tos into memory
+
+    # tmp = tmp + s[tos]
+    ld (r5,r4,4), r7        # r7 = s[tos]
+    add r1, r7              # r7 = s[tos] + tmp
+    st r7,0(r0)             # tmp = tmp + s[tos]
+    ld $tmp,r1              # r1 = address of tmp
+    ld 0(r1), r1            # r1 = value of tmp
+
+    # tos--
+    dec r4                  # tos--
+    st r4, 0(r3)            # store tos into memory
+
+    # tmp = tmp + s[tos]
+    ld (r5,r4,4), r7        # r7 = s[tos]
+    add r1, r7              # r7 = s[tos] + tmp
+    st r7,0(r0)             # tmp = tmp + s[tos]
+    ld $tmp, r1             # r1 = address of tmp
+    ld 0(r1), r1            # r1 = value of tmp
+
+    halt                    # halt
+
+.pos 0x200
+    a:  .long 0
+        .long 1
+        .long 2
+    s:  .long 3
+        .long 4
+        .long 5
+        .long 6
+        .long 7
+    tos:.long 1
+    tmp:.long 1
