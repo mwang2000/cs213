@@ -28,7 +28,7 @@ int main (int argc, char** argv) {
 //   }
 
   for (int i=0; i<n; i++) {
-    val[i] = strtol (argv[i+1], &ep, 10);
+    *(val+i) = strtol (*(argv+(i+1)), &ep, 10);
     if (*ep) {
       fprintf (stderr, "Argument %d is not a number\n", i);
       return -1;
@@ -36,5 +36,5 @@ int main (int argc, char** argv) {
   }
   sort (n);
   for (int i=0; i<n; i++)
-    printf ("%d\n", val[i]);
+    printf ("%d\n", *(val+i));
 }
