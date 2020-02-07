@@ -19,7 +19,7 @@ struct Node* create (int value) {
   newNode->val = value;
   newNode->leftChild = 0;
   newNode->rightChild = 0;
-  return *newNode;
+  return newNode;
 }
 
 /**
@@ -28,19 +28,19 @@ struct Node* create (int value) {
 void insert (struct Node* toNode, struct Node* n) {
   if (n->val <= noTode->val) {
     if (toNode->leftChild == 0) {
-      toNode->leftChild = n->val;
+      toNode->leftChild = n-;
     }
     else {
-      leftChild.insert(toNode, n);
+      insert(toNode->leftChild, n);
     }
    
   }
   else {
     if (toNode->rightChild == 0) {
-      toNode->rightChild = n->val;
+      toNode->rightChild = n;
     }
     else {
-      rightChild.insert(toNode, n);
+      insert(toNode->rightChild, n);
     }
   }
 }
@@ -49,11 +49,11 @@ void insert (struct Node* toNode, struct Node* n) {
  * Print the contents entire binary tree in order of ascending integer value.
  */
 void printInOrder (struct Node* node) {
-  if (left != 0)
-    node->leftChild.printInOrder(node);
+  if (node->leftChild != 0)
+    printInOrder(node->leftChild);
     out.printf ("%d\n", value);
-  if (right != 0)
-    node.rightChild.printInOrder(node);
+  if (node->right != 0)
+    printInOrder(node->rightChild);
   }
     
 }
