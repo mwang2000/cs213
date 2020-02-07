@@ -3,7 +3,7 @@
 
 void greet(char *name, int id) {
   printf("Hello %s!\n", name);
-  printf("  You are visitor #%s.\n", id);
+  printf("  You are visitor #%d.\n", id);
 }
 
 int main() {
