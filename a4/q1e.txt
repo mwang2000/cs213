@@ -1,0 +1,1 @@
+The segmentation fault is most likely due to the fact that the second printf is expecting a string instead of an int, which is what was given to it. printf was looking for an array of chars but found no such array.
