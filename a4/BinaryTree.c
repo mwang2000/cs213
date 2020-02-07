@@ -6,7 +6,7 @@
  * and pointers to its right and left children (or null).
  */
 struct Node {
-  int value;
+  int val;
   struct Node *leftChild;
   struct Node *rightChild;
 };
@@ -15,8 +15,8 @@ struct Node {
  * Create a new node with no children.
  */
 struct Node* create (int value) {
-  struct Node newNode = malloc(sizeof(value) * 3);
-  newNode->value = 100;
+  struct Node* newNode = (struct Node*) malloc(sizeof(struct Node));
+  newNode->val = value;
   newNode->leftChild = 0;
   newNode->rightChild = 0;
   return *newNode;
@@ -26,9 +26,9 @@ struct Node* create (int value) {
  * Insert the node n into the binary tree rooted by toNode.
  */
 void insert (struct Node* toNode, struct Node* n) {
-  if (n->value <= noTode->value) {
+  if (n->val <= noTode->val) {
     if (toNode->leftChild == 0) {
-      toNode->leftChild = n->value;
+      toNode->leftChild = n->val;
     }
     else {
       leftChild.insert(toNode, n);
@@ -37,7 +37,7 @@ void insert (struct Node* toNode, struct Node* n) {
   }
   else {
     if (toNode->rightChild == 0) {
-      toNode->rightChild = n->value;
+      toNode->rightChild = n->val;
     }
     else {
       rightChild.insert(toNode, n);
