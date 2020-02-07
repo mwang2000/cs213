@@ -30,15 +30,32 @@ void insert (struct Node* toNode, struct Node* n) {
     if (toNode->leftChild == 0) {
       toNode->leftChild = n->value;
     }
+    else {
+      leftChild.insert(toNode, n);
+    }
+   
   }
-
+  else {
+    if (toNode->rightChild == 0) {
+      toNode->rightChild = n->value;
+    }
+    else {
+      rightChild.insert(toNode, n);
+    }
+  }
 }
 
 /**
  * Print the contents entire binary tree in order of ascending integer value.
  */
 void printInOrder (struct Node* node) {
-  // TODO
+  if (left != 0)
+    node->leftChild.printInOrder(node);
+    out.printf ("%d\n", value);
+  if (right != 0)
+    node.rightChild.printInOrder(node);
+  }
+    
 }
 
 /**
