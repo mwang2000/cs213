@@ -26,9 +26,9 @@ struct Node* create (int value) {
  * Insert the node n into the binary tree rooted by toNode.
  */
 void insert (struct Node* toNode, struct Node* n) {
-  if (n->val <= noTode->val) {
+  if (n->val <= toNode->val) {
     if (toNode->leftChild == 0) {
-      toNode->leftChild = n-;
+      toNode->leftChild = n;
     }
     else {
       insert(toNode->leftChild, n);
@@ -49,10 +49,11 @@ void insert (struct Node* toNode, struct Node* n) {
  * Print the contents entire binary tree in order of ascending integer value.
  */
 void printInOrder (struct Node* node) {
-  if (node->leftChild != 0)
+  if (node->leftChild != 0) {
     printInOrder(node->leftChild);
-    out.printf ("%d\n", value);
-  if (node->right != 0)
+    printf ("%d\n", node->val);
+    }
+  if (node->rightChild != 0) {
     printInOrder(node->rightChild);
   }
     
