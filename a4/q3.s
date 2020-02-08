@@ -2,33 +2,43 @@
 code:
                  ld $i, r0                # r0 = &i
                  ld 0(r0), r0             # r0 = i
+                 ld $s, r1                # r1 = &s
+                 ld (r1, r0, 4), r2       # r2 = s.x[i]
+                 ld $v0, r3               # r3 = &v0
+                 st r2, 0(r3)             # v0 = s.x[i];
+
+                 ld 0x8(r1), r4           # r4 = &(s.*y)
+                 ld (r4, r0, 4), r5       # r5 = s.*y[i]
+                 ld $v1, r6               # r6 = &v1
+                 st r5, 0(r6)             # 
+
                  halt
 
 .pos 0x2000
 static:
-i:               .long 1                  # i
-v0:              .long 0                  # v0
-v1:              .long 0                  # v1
-v2:              .long 0                  # v2
-v3:              .long 0                  # v3
-s:               .long 1                  # x[0]
-                 .long 2                  # x[1]
+i:               .long 0x00000001         # i
+v0:              .long 0x00000000         # v0
+v1:              .long 0x00000000         # v1
+v2:              .long 0x00000000         # v2
+v3:              .long 0x00000000         # v3
+s:               .long 0x00000001         # x[0]
+                 .long 0x00000002         # x[1]
                  .long s_y                # *y
                  .long s_z                # *z
 
 .pos 0x3000
 heap:
-s_y:             .long 3                  # s_y[0]
-                 .long 4                  # s_y[1]
-s_z:             .long 5                  # s_z->x[0]
-                 .long 6                  # s_z->x[1]
-                 .long 0                  # s_z->*y
+s_y:             .long 0x00000003         # s_y[0]
+                 .long 0x00000004         # s_y[1]
+s_z:             .long 0x00000005         # s_z->x[0]
+                 .long 0x00000006         # s_z->x[1]
+                 .long 0x00000000         # s_z->*y
                  .long s_z_z              # s_z->*z
-s_z_z:           .long 7                  # s_z_z->x[0]
-                 .long 8                  # s_z_z->x[1]
+s_z_z:           .long 0x00000007         # s_z_z->x[0]
+                 .long 0x00000008         # s_z_z->x[1]
                  .long s_z_z_y            # s_z_z->*y
-                 .long 0                  # s_z_z->*z
-s_z_z_y:         .long 9                  # s_z_z->y[0]
-                 .long 0                  # s_z_z->y[1]
+                 .long 0x00000000         # s_z_z->*z
+s_z_z_y:         .long 0x00000009         # s_z_z->y[0]
+                 .long 0x00000000         # s_z_z->y[1]
 
 

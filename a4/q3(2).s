@@ -35,8 +35,8 @@ v2: .long 0x00000004
 v3: .long 0x00000005
 s:  .long 0x00000006            # x[0]
     .long 0x00000007            # x[1]
-    .long 0xs_y                 # s.y (contains the address of y)
-    .long 0xs_z                 # s.z
+    .long s_y                 # s.y (contains the address of y)
+    .long s_z                 # s.z
 
 .pos 0x3000
 heap:
@@ -45,16 +45,21 @@ s_y:        .long 0x0000008     # s.y[0]
 
 s_z:        .long 0x0000000a    # x[0]
             .long 0x0000000b    # x[1]
-            .long 0xs_z_y       # s.y (contains the address of y)
-            .long 0xs_z_z       # s.z
+            .long s_z_y       # s.y (contains the address of y)
+            .long s_z_z       # s.z
 
 s_z_y:      .long 0x0000000c    # s_z.y[0]
             .long 0x0000000d    # s_z.y[1]
 
 s_z_z:      .long 0x0000000e    # x[0]
             .long 0x0000000f    # x[1]
-            .long 0xs_z_z_y     # s_z_z.y (address of y)
-            .long 0xs_z_z_z     # struct pointer address
+            .long s_z_z_y     # s_z_z.y (address of y)
+            .long s_z_z_z     # struct pointer address
 
 s_z_z_y:    .long 0x00000010    # s_z_z.y[0]
             .long 0x00000011    # s_z_z.y[1]
+
+s_z_z_z:    .long 0x0000000e    # x[0]
+            .long 0x0000000f    # x[1]
+            .long 0     # s_z_z.y (address of y)
+            .long 0     # struct pointer address
