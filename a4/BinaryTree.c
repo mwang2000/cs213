@@ -51,8 +51,8 @@ void insert (struct Node* toNode, struct Node* n) {
 void printInOrder (struct Node* node) {
   if (node->leftChild != 0) {
     printInOrder(node->leftChild);
-    printf ("%d\n", node->val);
     }
+  printf ("%d\n", node->val);
   if (node->rightChild != 0) {
     printInOrder(node->rightChild);
   }
@@ -64,10 +64,20 @@ void printInOrder (struct Node* node) {
  * print it in depth-first order.
  */
 int main (int argc, char* argv[]) {
+  // create a root node
+  struct Node* rootNode = create(0);
+
   // read values from command line and add them to the tree
   for (int i=1; i<argc; i++) {
     int value = atoi (argv [i]);
-    printf ("%d\n", value);
+    struct Node* newNode = create(value);
+    if (rootNode->val == 0) {
+      rootNode = newNode;
+    } 
+    else {
+      insert(rootNode, newNode);  
+    }
   }
-  // TODO
+  printInOrder(rootNode);
+  return 0;
 }
