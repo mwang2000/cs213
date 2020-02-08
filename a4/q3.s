@@ -10,8 +10,19 @@ code:
                  ld 0x8(r1), r4           # r4 = &(s.*y)
                  ld (r4, r0, 4), r5       # r5 = s.*y[i]
                  ld $v1, r6               # r6 = &v1
-                 st r5, 0(r6)             # 
+                 st r5, 0(r6)             # v1 = s.y[i]
 
+                 ld 0xc(r1), r7           # r7 = &(s.*z)
+                 ld (r7, r0, 4), r2       # r7 = s.*z->x[i]
+                 ld $v2, r3               # r3 = &v2
+                 st r2, 0(r3)             # v2 = s.z->x[i];
+
+                 ld 0xc(r7), r4          # r4 = &(s.*z->z)
+                 ld 0x8(r4), r4           # r4 = &(s.*z->z->*y)
+                 ld (r4, r0, 4), r4       # r4 = s.*z->z->*y[i]
+                 ld $v3, r6               # r6 = &v3
+                 st r4, 0(r6)             # v2 = s.z->x[i];
+                                          # v3 = s.z->z->y[i]
                  halt
 
 .pos 0x2000
