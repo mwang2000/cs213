@@ -37,6 +37,7 @@ void mymalloc_init(char *_heap, int _heapsize) {
 
 Returns: a pointer aligned to 8 bytes, or NULL if allocation failed. */
 void *mymalloc(int size) {
+  printf("line40");
   /* This is a dumb implementation of malloc, adapted slightly from the slides. 
 
   You will augment this solution to make a real malloc. */
@@ -47,6 +48,7 @@ void *mymalloc(int size) {
   /* TODO: Implement and walk a free list before allocating off `top` as a last resort */
   struct Metadata* temp = head;
   while (temp != NULL && temp->next != NULL) {
+    printf("line51");
     if (temp->size >= size) {
       void *freeSpace = &temp + 16; 
       return freeSpace;
@@ -67,6 +69,7 @@ void *mymalloc(int size) {
 
 /* Free the given block of memory. */
 void myfree(void *ptr) {
+  printf("line73");
   /* TODO: Our dumb implementation does not allow for any freeing. Implement me! */
   struct Metadata* meta = ptr - 16;
   // meta->size = (int*)ptr - 16;
