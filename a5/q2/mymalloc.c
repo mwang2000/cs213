@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "mymalloc.h"
 
@@ -25,6 +26,7 @@ void mymalloc_init(char *_heap, int _heapsize) {
   heapsize = _heapsize;
   top = 0;
   struct Metadata md;
+  
   /* TODO: Any other initialization you want to do */
   /* NOTE! Each call to mymalloc_init should initialize a brand new heap
      (discarding the old one), as it will be called once per test.
@@ -42,7 +44,6 @@ void *mymalloc(int size) {
   /* Round `size` up to a multiple of 8 bytes */
   /* TODO: Make room for any extra metadata you want to store */
   size = (size + 7) / 8 * 8 + 16;
-  
   /* TODO: Implement and walk a free list before allocating off `top` as a last resort */
   struct Metadata* temp = head;
   while (temp != NULL && temp->next != NULL) {
@@ -71,7 +72,7 @@ void myfree(void *ptr) {
   // meta->size = (int*)ptr - 16;
   // meta->next = (int*)ptr - 12;
   // struct Metadata* temp = meta;
-  if (meta != NULL) {
+  if (meta != NULL && head != NULL) {
   meta->next = head;
   head = meta;
   }
