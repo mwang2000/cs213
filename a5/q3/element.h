@@ -1,5 +1,6 @@
 /* This header file defines the element structure and functions to operate on it. */
 #pragma once
+#include "refcount.h"
 
 /** Structure forward declaration. Without a full declaration of the structure,
    the structure implementation is "private" to other modules - they must only use the public API. */

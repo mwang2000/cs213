@@ -17,7 +17,7 @@ struct list_node {
  * Create new list
  */
 struct list *list_new() {
-  struct list *l = malloc(sizeof(*l));
+  struct list *l = rc_malloc(sizeof(*l));
   l->head = l->tail = NULL;
   return l;
 }
@@ -41,6 +41,7 @@ void list_delete(struct list *l) {
 struct list_node *list_add_element(struct list *l, struct element *e) {
   struct list_node *n = malloc(sizeof(*n));
   n->elem = e;
+  rc_keep_ref(e);
   n->prev = n->next = NULL;
 
   if(l->head == NULL) {
@@ -70,7 +71,7 @@ void list_delete_element(struct list *l, struct list_node *n) {
 
   n->next = n->prev = NULL;
   element_delete(n->elem);
-  free(n);
+  rc_free_ref(n);
 }
 
 /**
