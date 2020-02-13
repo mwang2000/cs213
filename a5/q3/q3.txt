@@ -1,3 +1,1 @@
-When main.c calls list_delete(l), the list_delete_element() function causes
-dangling pointers when free() is called on each element, as nodes in the tree
-are still referencing these addresses in memory.
+When main.c calls list_delete(l), the list_delete_element() function causes dangling pointers when free() is called on each element in the element_delete() function, as nodes in the tree are still referencing these addresses in memory.
