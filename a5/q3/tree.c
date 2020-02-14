@@ -17,7 +17,7 @@ struct tree_node {
  * Create a new, empty tree
  */
 struct tree *tree_new() {
-  struct tree *t = rc_malloc(sizeof(*t));
+  struct tree *t = malloc(sizeof(*t));
   t->root = NULL;
   return t;
 }
@@ -27,7 +27,7 @@ static void tree_delete_helper(struct tree_node *n) {
     tree_delete_helper(n->left);
     tree_delete_helper(n->right);
     element_delete(n->elem);
-    rc_free_ref(n);
+    free(n);
   }
 }
 

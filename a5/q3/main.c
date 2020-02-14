@@ -16,8 +16,10 @@ int main(int argc, char **argv) {
   struct tree *t = tree_new();
   struct list *l = list_new();
 
-  for (int i=0; i<argc-1; i++)
+  for (int i=0; i<argc-1; i++) {
     list_add_element(l, element_new(i+1, argv[i+1]));
+  }
+
 
   for(struct list_node *n = list_get_head(l); n != NULL; n = list_node_get_next(n)) {
     if(includeElement())

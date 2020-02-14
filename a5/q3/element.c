@@ -13,19 +13,22 @@ struct element {
  * Postcondition: the created element has its own copy of the string.
  */
 struct element *element_new(int num, char *value) {
-  struct element *e = rc_malloc(sizeof(*e));
+  struct element *e = rc_malloc(sizeof(struct element));
   if(e == NULL) {
     /* out of memory? */
     return NULL;
   }
   e->num = num;
-  e->value = strdup(value);
+
+  //e->value = strdup(value);
+  char *temp = value;
+  e->value = temp;
   return e;
 }
 
 /** Delete an element, freeing the memory associated with it. */
 void element_delete(struct element *e) {
-  rc_free_ref(e->value);
+//   free(e->value);
   rc_free_ref(e);
 }
 
