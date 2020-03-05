@@ -13,7 +13,7 @@ int f(int arg1) {
     }
 }
 
-int main(int argc, char** argv) {
+int main() {
   for (int count1 = 8; count1 > 0; count1--) {
       y[count1] = f(x[count1]); 
   }
