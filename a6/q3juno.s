@@ -89,21 +89,21 @@ swap_loop:
       br swap_loop
 
 median:
-                ld $n, r7                   # r7 = n
-                ld 0(r7), r7
-                shr $1, r7                  # r7 = n'/2 = m
-                ld $s, r0                   # r0 = &s
-                ld (r0), r0                 # r0 = &s[0][0]
-                mov r7, r1                  # r1 = m'
-                mov r7, r2                  # r2 = m'
-                shl $4, r1                  # r1 = m' * 16
-                shl $3, r2                  # r2 = m' * 8
-                add r2, r1                  # r4 = m' * 24
-                add r1, r0                  # r0 = &s[m']
-                ld (r0), r0                 # r0 = s[m']
-                ld $m, r2                   # r2 = &m
-                st r0, (r2)                 # m = s[m']
-                halt
+      ld $n, r7                   # r7 = n
+      ld 0(r7), r7
+      shr $1, r7                  # r7 = n'/2 = m
+      ld $s, r0                   # r0 = &s
+      ld (r0), r0                 # r0 = &s[0][0]
+      mov r7, r1                  # r1 = m'
+      mov r7, r2                  # r2 = m'
+      shl $4, r1                  # r1 = m' * 16
+      shl $3, r2                  # r2 = m' * 8
+      add r2, r1                  # r4 = m' * 24
+      add r1, r0                  # r0 = &s[m']
+      ld (r0), r0                 # r0 = s[m']
+      ld $m, r2                   # r2 = &m
+      st r0, (r2)                 # m = s[m']
+      halt
 
 .pos 0x200
 n:      .long 3
