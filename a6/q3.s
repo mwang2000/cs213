@@ -2,11 +2,16 @@
                 ld $0, r4                   # r4 = i = 0
                 ld $n, r7                   # r7 = &n
                 ld (r7), r7                 # r7 = n = n'
+                bgt r7, avg
+                ld $s, r0                   # r0 = &s
+                
+
+        avg:
+        
                 not r7                      
                 inc r7                      # r7 = -n' 
-                ld $s, r0                   # r0 = &s
-
-        avg:    mov r4, r5                  # r5 = i'
+        
+                mov r4, r5                  # r5 = i'
                 add r7, r5                  # r5 = i' - n'
                 beq r5, sort                # goto sort if i' == n'
                 mov r4, r5                  # r5 = i'
@@ -43,6 +48,9 @@
                 ld $24, r2                  # r2 = 24
                 add r1, r2                  # r2 = &s[i'+1]
                 mov r1, r3                  # r3 = &s[i']
+
+                
+
                 st r2, (r1)                 # r1 = &s[i'+1]
                 st r3, (r2)                 # r2 = &s[i']
                 inca r1                     # r1 += 4
@@ -58,8 +66,10 @@
                 mov r2, r4                  # r4 = i''
                 not r4
                 inc r4                      # r4 = -i'
+
         sort_loop: beq r2, median           # goto median if n'-1 == 0        
                 ld $0, r3                   # r3 = j' = 0
+
         bubble: add r3, r4                  # r4 = j' - i'
                 beq r4, end_sort            # goto end_sort if j' == i'
                 mov r3, r1                  # r1 = j'
