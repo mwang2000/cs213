@@ -21,6 +21,8 @@ void str_element_print(void *thisv) {
 int str_element_compare(void *this1, void *this2) {
     if (is_str_element(this1) == 0 && is_str_element(this2) == 1) {
         return -1;
+    } else if (is_str_element(this1) == 1 && is_str_element(this2) == 1) {
+        return strcmp(this1, this2);
     } else {
         return 1;
     }
