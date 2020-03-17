@@ -21,10 +21,10 @@ void parse_string(element_t* rv, element_t av) {
 }
 
 void convertToNull(element_t* rv, element_t av, element_t bv) {
+    char** r = (char**) rv;
     int* a = (int*) av;
     char* b = (char*) bv;
-    char** r = (char**) rv;
-    if (*a != -1) {
+    if (a != -1) {
         *r = NULL;
     } else {
         *r = b;
@@ -33,7 +33,7 @@ void convertToNull(element_t* rv, element_t av, element_t bv) {
 
 int isPositive(element_t av) {
     int* a = (int*) av;
-    return a>=0;  
+    return a!=-1;  
 }
 
 int isNotNull(element_t av) {
@@ -43,24 +43,23 @@ int isNotNull(element_t av) {
 
 void truncate(element_t* rv, element_t av, element_t bv) {
     char** r = (char**) rv;
-    char* a = (char*) av;
-    int* b = (int*) bv;
-    if (strlen(a) > *b) {
-        a[*b] = 0;
-    }
-    *r = a;
+    int* a = (int*) av;
+    char* b = (char*) bv;
+    *r = strndup(b, a);
 }
 
 void print(element_t av) {
     char* a = (char*) av;
+    if (a != NULL) {
     printf("%s\n", a);
+    }
 }
 
 void findMax(element_t* rv, element_t av, element_t bv) {
   int** r = (int**) rv;
   int* a = (int*) av;
   int* b = (int*) bv;
-  if (a > b) {
+  if (a >= b) {
     *r = a;
   } else {
     *r = b;
@@ -68,29 +67,31 @@ void findMax(element_t* rv, element_t av, element_t bv) {
 }
 
 int main(int argc, char* argv[]) {
-    printf("a");
     struct list* list = list_create();
     for (int i = 1; i < argc; i++) {
         list_append(list,(element_t)argv[i]);
     }
-    struct list* listOfNum = list_create();
+
+    struct list* listOfNum = list_create(); // list of numbers, -1 if list had a string 
     list_map1(parse_string,listOfNum, list);
 
-    struct list* listOfNull = list_create();
+    struct list* listOfNull = list_create(); // list of string, null if numbers
     list_map2(convertToNull,listOfNull,listOfNum,list);
 
-    struct list* listOfPositives = list_create();
+    struct list* listOfPositives = list_create(); // filtered listOfNum
     list_filter(isPositive, listOfPositives, listOfNum);
 
-    struct list* listOfNoNull = list_create();
+    struct list* listOfNoNull = list_create(); // filtered listOfNull
     list_filter(isNotNull,listOfNoNull,listOfNull);
 
     struct list* result = list_create();
     list_map2 (truncate, result, listOfPositives,listOfNoNull);
 
     list_foreach(print,result);
-    element_t max;
-    list_foldl(findMax,&max,listOfNum);
+
+
+    element_t max = 0;
+    list_foldl(findMax,&max,listOfPositives);
     printf("%d\n", max);
 
     list_destroy(list);
