@@ -66,6 +66,15 @@ void findMax(element_t* rv, element_t av, element_t bv) {
   }
 }
 
+void concatenate(element_t* vv, element_t av, element_t bv) {  
+  char **v = (char**) vv;
+  char *a = av;  
+  char *b = bv;
+  *v = realloc(*v, strlen(*v) + strlen(b) + 1);  
+  strcat(*v, b);
+  strcat(*v, " ");
+}
+
 int main(int argc, char* argv[]) {
     struct list* list = list_create();
     for (int i = 1; i < argc; i++) {
@@ -89,6 +98,11 @@ int main(int argc, char* argv[]) {
 
     list_foreach(print,result);
 
+    char* concat = malloc(1);
+    *concat = 0;
+    list_foldl(concatenate,&concat,result);
+    printf("%s\n",concat);
+    free(concat);
 
     element_t max = 0;
     list_foldl(findMax,&max,listOfPositives);
