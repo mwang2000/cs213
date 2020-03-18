@@ -1,5 +1,5 @@
 .pos 0x0
-                 ld   $0x1028, r5           # r5 = 1028
+                 ld   $0x1028, r5           # r5 = 1028 = stack pointer
                  ld   $0xfffffff4, r0       # r0 = -12
                  add  r0, r5                # r5 = stack pointer + 3
                  ld   $0x200, r0            # r0 = 0x200 = &a 
