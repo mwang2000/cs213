@@ -60,7 +60,7 @@ L1:              br   L7                    # go to L7
                  ld   $0x0, r2              # r2 = c = 0
                  br   L3                    # go to L3
 L2:              ld   $0x1, r2              # r2 = c = 1
-L3:              br   L7                    # go to L3
+L3:              br   L7                    # go to L7
                  not  r2                    # not(c)
                  inc  r2                    # r2 = -c
                  add  r1, r2                # r2 = -c + b
