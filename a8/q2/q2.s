@@ -14,7 +14,7 @@
                  gpc  $6, r6                # r6 = return address 6 bytes ahead
                  j    0x300                 # jump to 0x300, call function
                  ld   $0x20c, r1            # r1 = &returned_value
-                 st   r0, 0x0(r1)           # returned_value
+                 st   r0, 0x0(r1)           # r0 = returned_value
                  halt                       # stop
 .pos 0x200
                  .long 0x00000000           # a
