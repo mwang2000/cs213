@@ -16,14 +16,21 @@ int histogram [MAX_ITEMS+1];
 // number of items currently produced but not yet consumed
 // invariant that you must maintain: 0 >= items >= MAX_ITEMS
 int items = 0;
+uthread_sem_t mutex;
+uthread_sem_t needs_items;
+uthread_sem_t has_items;
 
 // if necessary wait until items < MAX_ITEMS and then increment items
 // assertion checks the invariant that 0 >= items >= MAX_ITEMS
 void* producer (void* v) {
   for (int i=0; i<NUM_ITERATIONS; i++) {
+    uthread_sem_wait(needs_items);
+    uthread_sem_wait(mutex);
     items += 1;
     assert (items >= 0 && items <= MAX_ITEMS);
     histogram [items] ++;
+    uthread_sem_signal(mutex);
+    uthread_sem_signal(has_items);
   }
   return NULL;
 }
@@ -32,9 +39,13 @@ void* producer (void* v) {
 // assertion checks the invariant that 0 >= items >= MAX_ITEMS
 void* consumer (void* v) {
   for (int i=0; i<NUM_ITERATIONS; i++) {
+    uthread_sem_wait(has_items);
+    uthread_sem_wait(mutex);
     items -= 1;
     assert (items >= 0 && items <= MAX_ITEMS);
-    histogram [items] ++;  
+    histogram [items] ++;
+    uthread_sem_signal(mutex);
+    uthread_sem_signal(needs_items);  
   }
   return NULL;
 }
@@ -43,6 +54,9 @@ int main (int argc, char** argv) {
 
   // init the thread system
   uthread_init (NUM_PROCESSORS);
+  mutex = uthread_sem_create(1);
+  needs_items = uthread_sem_create(0);
+  has_items = uthread_sem_create(MAX_ITEMS);
 
   // start the threads
   uthread_t threads [NUM_PRODUCERS + NUM_CONSUMERS];
