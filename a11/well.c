@@ -25,6 +25,17 @@ const static enum Endianness oppositeEnd [] = {BIG, LITTLE};
 
 struct Well {
   // TODO
+  uthread_cond_t endianTypeInWellCond;
+  uthread_mutex_t mutualExclusionThread;
+
+  int maxOccupancy;
+  int numberBig;
+  int numberSmall;
+
+  enum endianTypeInWell;
+
+
+
 };
 
 struct Well* createWell() {
