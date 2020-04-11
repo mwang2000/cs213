@@ -24,10 +24,9 @@ enum Endianness {LITTLE = 0, BIG = 1};
 const static enum Endianness oppositeEnd [] = {BIG, LITTLE};
 
 struct Well {
-  // TODO
   // condition and mutex threads
-  uthread_cond_t endianTypeInWellCond[2];
   uthread_mutex_t mutualExclusionThread;
+  uthread_cond_t endianTypeInWellCond[2];
 
   // number of people currently in well
   int occupancy;
@@ -75,81 +74,49 @@ int             waitingHistogramOverflow;
 uthread_mutex_t waitingHistogrammutex;
 int             occupancyHistogram       [2] [MAX_OCCUPANCY + 1];
 
-
-
-
-
-
 void enterWell (enum Endianness g) {
-  // TODO
-  // if (Well){
-  
   uthread_mutex_lock(Well->mutualExclusionThread);
-  
-  
-  if (Well->occupancy == 0) {
-    Well->endianTypeInWell = g;
-  }
-  if (g == LITTLE){
-    //int startingValueTime = entryTicker;
-    Well->numWaiting[g]++;
-    // could Well->occupancyByType[oppositeEnd[g]] work??
-    while (Well->occupancy == MAX_OCCUPANCY || Well->endianTypeInWell != g || Well->occupancyByType[BIG] > 0) {
-      // startingValueTime++;
-      uthread_cond_wait(Well->endianTypeInWellCond[g]);
+  while(1) {
+    if (Well->occupancy == 0 
+    || (Well->occupancy < MAX_OCCUPANCY && Well->endianTypeInWell == g 
+    && !(Well->numWaiting[oppositeEnd[g]] > 0 
+    && Well->numOtherEndWaiting > FAIR_WAITING_COUNT))) {
+      if(Well->endianTypeInWell == g){
+        Well->numOtherEndWaiting++;
+      } else {
+        Well->numOtherEndWaiting = 0;
+      }
+      entryTicker++;
+      break;
     }
-    Well->numWaiting[g]--;
-    // int endingValueTime = entryTicker
-    //recordWaitingTime(endingValueTime - startingValueTime);
-    Well->occupancy++;
-    Well->occupancyByType[g]++;
-    occupancyHistogram[g][Well->occupancy]++;
-  } else if (g == BIG) {
-    //int startingValueTime = entryTicker;
-    Well->numWaiting[g]++;
-    // could Well->occupancyByType[oppositeEnd[g]] work??
-    while (Well->occupancy == MAX_OCCUPANCY || Well->endianTypeInWell != g || Well->occupancyByType[LITTLE] > 0) {
-      // startingValueTime++;
-      uthread_cond_wait(Well->endianTypeInWellCond[g]);
+    if (Well->numWaiting[g] == 0 && !(Well->endianTypeInWell == g)) {
+        Well->numOtherEndWaiting = 0;
     }
+    Well->numWaiting[g]++;
+    uthread_cond_wait(Well->endianTypeInWellCond[g]);
     Well->numWaiting[g]--;
-    // int endingValueTime = entryTicker
-    //recordWaitingTime(endingValueTime - startingValueTime);
-    Well->occupancy++;
-    Well->occupancyByType[g]++;
-    occupancyHistogram[g][Well->occupancy]++;
   }
+  Well->occupancy++;
+  Well->endianTypeInWell = g;
+  occupancyHistogram[g][Well->occupancy]++;
   uthread_mutex_unlock(Well->mutualExclusionThread);
-  // }
 }
 
 void leaveWell() {
-  // TODO
   uthread_mutex_lock(Well->mutualExclusionThread);
-  if (Well->endianTypeInWell == LITTLE){
-    Well->occupancy--;
-    Well->occupancyByType[LITTLE]--;
-    if (Well->occupancyByType[LITTLE] == 0 && Well->occupancy == 0){
-      if (Well->numWaiting[LITTLE] == 0 || Well->numWaiting[BIG] > FAIR_WAITING_COUNT){
-        Well->endianTypeInWell == BIG;
-        uthread_cond_broadcast(Well->endianTypeInWellCond[BIG]);
-      }
-    } 
-    else {
-      uthread_cond_signal(Well->endianTypeInWellCond[LITTLE]);
+
+  enum Endianness inWell = Well->endianTypeInWell;
+
+  Well->occupancy--;
+
+  if ((!(Well->numWaiting[inWell] > 0) 
+  || Well->numOtherEndWaiting > FAIR_WAITING_COUNT) 
+  && Well->numWaiting[oppositeEnd[inWell]] > 0) {
+    if(Well->occupancy == 0) {
+      uthread_cond_broadcast(Well->endianTypeInWellCond[oppositeEnd[inWell]]);
     }
-  } else if (Well->endianTypeInWell == BIG){
-    Well->occupancy--;
-    Well->occupancyByType[BIG]--;
-    if (Well->occupancyByType[BIG] == 0 && Well->occupancy == 0){
-      if (Well->numWaiting[BIG] == 0 || Well->numWaiting[LITTLE] > FAIR_WAITING_COUNT){
-        Well->endianTypeInWell == LITTLE;
-        uthread_cond_broadcast(Well->endianTypeInWellCond[LITTLE]);
-      }
-    } 
-    else {
-      uthread_cond_signal(Well->endianTypeInWellCond[BIG]);
-    }
+  } else if (Well->numWaiting[inWell] > 0) {
+    uthread_cond_signal(Well->endianTypeInWellCond[inWell]);
   }
   uthread_mutex_unlock(Well->mutualExclusionThread);
 }
@@ -167,6 +134,12 @@ void recordWaitingTime (int waitingTime) {
 // TODO
 // You will probably need to create some additional produres etc.
 //
+
+int getTime(int startingValue) {
+  int toReturn = entryTicker - startingValue;
+  return toReturn;
+}
+
 void* gateKeeper() {
   enum Endianness endianness = random() % 2;
   int startingValueTime;
@@ -174,7 +147,7 @@ void* gateKeeper() {
     startingValueTime = entryTicker;
     enterWell(endianness);
 
-    recordWaitingTime(entryTicker - startingValueTime);
+    recordWaitingTime(getTime(startingValueTime));
 
     // yield n times before leaving well
     for (int j = 0; j < NUM_PEOPLE; j++) {
@@ -198,10 +171,11 @@ int main (int argc, char** argv) {
 
   // TODO
   for (int i = 0; i < NUM_PEOPLE; i++) {
-    pt[i] = uthread_create(gateKeeper, Well);
+    pt[i] = uthread_create(gateKeeper, 0);
+
   }
-  for (int i = 0; i < NUM_PEOPLE; i++) {
-    uthread_join(pt[i], 0);
+  for (int j = 0; j < NUM_PEOPLE; j++) {
+    uthread_join(pt[j], 0);
   }
 
 
