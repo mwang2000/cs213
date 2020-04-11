@@ -1,3 +1,4 @@
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
@@ -36,50 +37,10 @@ struct Agent* createAgent() {
 // TODO
 // You will probably need to add some procedures and struct etc.
 //
-<<<<<<< Updated upstream
 int resources = 0;
 uthread_cond_t tobacco_smoker;
 uthread_cond_t paper_smoker;
 uthread_cond_t match_smoker;
-=======
-
-typedef struct TheSmokingMen {
-
-  int amountTobacco;
-  int amountMatches;
-  int amountPaper;
-
-  uthread_cond_t theSmokingManIsSmoking;
-
-  uthread_cond_t hasTobacco;
-  uthread_cond_t hasMatches;
-  uthread_cond_t hasPaper;
-
-  struct Agent *theMainPlug;
-
-} TheSmokingMan;
-
-TheSmokingMan* createTheSmokingMan(struct Agent* somePlug) {
-
-  TheSmokingMan* someSmokingMan = malloc(sizeof(TheSmokingMan));
-    
-    someSmokingMan->amountTobacco = 0;
-    someSmokingMan->amountMatches = 0;
-    someSmokingMan->amountPaper = 0;
-
-    someSmokingMan->theSmokingManIsSmoking = uthread_cond_create(somePlug->mutex);
-
-    someSmokingMan->hasTobacco = uthread_cond_create(somePlug->mutex);
-    someSmokingMan->hasMatches = uthread_cond_create(somePlug->mutex);
-    someSmokingMan->hasPaper = uthread_cond_create(somePlug->mutex);
-
-    someSmokingMan->theMainPlug = somePlug;
-  
-  return someSmokingMan;
-  
-}
-
->>>>>>> Stashed changes
 /**
  * You might find these declarations helpful.
  *   Note that Resource enum had values 1, 2 and 4 so you can combine resources;
@@ -185,7 +146,6 @@ void* tobacco_handler(void* av) {
   uthread_mutex_unlock(a->mutex);
 }
 
-<<<<<<< Updated upstream
 void* tobacco (void* av) {
   struct Agent* a = av;
   uthread_mutex_lock (a->mutex);
@@ -221,45 +181,6 @@ void* match (void* av) {
   }
   uthread_mutex_unlock (a->mutex);
 }
-=======
-void* theSmokingManProcedure (void* theSmokingManArg) {
-  // TheSmokingMan* tempSmokingMan = theSmokingManArg;
-  // struct Agent* tempAgent = theSmokingManArg->theMainPlug;
-
-  // uthread_mutex_lock (tempAgent->mutex);
-  
-  // while(1) {
-  //   uthread_cond_wait();
-    // for (int i = 0; i < NUM_ITERATIONS; i++) {
-    //   int r = random() % 3;
-    //   signal_count [matching_smoker [r]] ++;
-    //   int c = choices [r];
-    //   if (c & MATCH) {
-    //     VERBOSE_PRINT ("match available\n");
-    //     uthread_cond_signal (a->match);
-    //   }
-    //   if (c & PAPER) {
-    //     VERBOSE_PRINT ("paper available\n");
-    //     uthread_cond_signal (a->paper);
-    //   }
-    //   if (c & TOBACCO) {
-    //     VERBOSE_PRINT ("tobacco available\n");
-    //     uthread_cond_signal (a->tobacco);
-    //   }
-    //   VERBOSE_PRINT ("agent is waiting for smoker to smoke\n");
-    //   uthread_cond_wait (a->smoke);
-    // }
-    // uthread_mutex_unlock (a->mutex);
-    // return NULL;
-
-    
-    // }
- }
->>>>>>> Stashed changes
-
-//  tobaccoAgent
-//  paperAgent
-//  matchesAgent
 
 int main (int argc, char** argv) {
   uthread_init (7);
