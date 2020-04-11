@@ -125,6 +125,33 @@ void enterWell (enum Endianness g) {
 
 void leaveWell() {
   // TODO
+  uthread_mutex_lock(Well->mutualExclusionThread);
+  if (Well->endianTypeInWell == LITTLE){
+    Well->occupancy--;
+    Well->occupancyByType[LITTLE]--;
+    if (Well->occupancyByType[LITTLE] == 0 && Well->occupancy == 0){
+      if (Well->numWaiting[LITTLE] == 0 || Well->numWaiting[BIG] > FAIR_WAITING_COUNT){
+        Well->endianTypeInWell == BIG;
+        uthread_cond_broadcast(Well->endianTypeInWellCond[BIG]);
+      }
+    } 
+    else {
+      uthread_cond_signal(Well->endianTypeInWellCond[LITTLE]);
+    }
+  } else if (Well->endianTypeInWell == BIG){
+    Well->occupancy--;
+    Well->occupancyByType[BIG]--;
+    if (Well->occupancyByType[BIG] == 0 && Well->occupancy == 0){
+      if (Well->numWaiting[BIG] == 0 || Well->numWaiting[LITTLE] > FAIR_WAITING_COUNT){
+        Well->endianTypeInWell == LITTLE;
+        uthread_cond_broadcast(Well->endianTypeInWellCond[LITTLE]);
+      }
+    } 
+    else {
+      uthread_cond_signal(Well->endianTypeInWellCond[BIG]);
+    }
+  }
+  uthread_mutex_unlock(Well->mutualExclusionThread);
 }
 
 void recordWaitingTime (int waitingTime) {

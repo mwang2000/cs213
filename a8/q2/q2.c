@@ -3,6 +3,7 @@
 
 int q2(int a, int b, int c) {
     int r3 = -10;
+    int toReturn;
     switch (r3+a) {
         case 0:  
             c = c + b; 
@@ -46,7 +47,7 @@ int q2(int a, int b, int c) {
         default:  
             c = 0;
   }
-  return c;
+  return toReturn;
 }
 
 int main() {
